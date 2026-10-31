@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('mei_name');
             $table->date('opening_date');
             $table->string('ibge_municipality_code', 7);
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
-        }); 
+        });
 
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('mei');
     }
 };
