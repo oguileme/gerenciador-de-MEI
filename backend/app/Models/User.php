@@ -2,20 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    //
+    use HasFactory, Notifiable, SoftDeletes;
+
     protected $table = 'users';
+
     protected $fillable = [
         'name',
         'email',
         'password',
-        'birth_date'
+        'birth_date',
     ];
 
-    function mei()
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'birth_date' => 'date',
+        ];
+    }
+
+    public function mei()
     {
         return $this->hasOne(Mei::class);
     }
