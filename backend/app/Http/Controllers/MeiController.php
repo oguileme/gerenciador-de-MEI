@@ -1,95 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Mei\StoreMeiRequest;
+use App\Http\Requests\Mei\UpdateMeiRequest;
+use App\Http\Resources\MeiResource;
 use App\Models\Mei;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class MeiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): AnonymousResourceCollection
     {
-        //
-        return response()->json(Mei::all());
+        $meis = $request->user()
+            ->meis()
+            ->latest('id')
+            ->paginate(15);
+
+        return MeiResource::collection($meis);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreMeiRequest $request): JsonResponse
     {
-        //
+        $mei = $request->user()->meis()->create($request->validated());
+
+        return (new MeiResource($mei))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Mei $mei): MeiResource
     {
-        //
-        $data  = $request->validate([
-            'cnpj' => 'required|string|max:14|unique:mei',
-            'mei_name' => 'required|string|max:255',
-            'opening_date' => 'required|date',
-            'ibge_municipality_code' => 'required|string|max:7',
-        ]);
-
-        $mei = Mei::create($data);
-        return response()->json($mei, 201);
+        return new MeiResource($mei);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Mei $mei)
+    public function update(UpdateMeiRequest $request, Mei $mei): MeiResource
     {
-        //
-        if(auth()->user()->id !== $mei->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        $mei->update($request->validated());
+
+        return new MeiResource($mei);
+    }
+
+    public function destroy(Mei $mei): Response
+    {
+        $mei->delete();
+
+        return response()->noContent();
+    }
+
+    public function restore(Mei $mei): MeiResource|JsonResponse
+    {
+        if (! $mei->trashed()) {
+            return response()->json([
+                'message' => 'O MEI já está ativo.',
+            ], Response::HTTP_CONFLICT);
         }
-        return response()->json($mei);
-    }
 
+        $mei->restore();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Mei $mei)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Mei $mei)
-    {
-        //
-        if(auth()->user()->id !== $mei->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        $data = $request->validate([
-            'mei_name' => 'sometimes|string|max:255',
-            'opening_date' => 'sometimes|date',
-            'ibge_municipality_code' => 'sometimes|string|max:7',
-        ]);
-
-        $mei->update($data);
-        return response()->json($mei);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Mei $mei)
-    {
-        if(auth()->user()->id !== $mei->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        $mei->update(['deleted_at' => now()]);
-        return response()->json(['message' => 'MEI deleted successfully']);
+        return new MeiResource($mei->refresh());
     }
 }
