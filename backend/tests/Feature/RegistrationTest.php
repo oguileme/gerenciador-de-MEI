@@ -7,11 +7,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
-use Tests\TestCase;
 
-uses(TestCase::class, RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 it('permite cadastro em bancos antigos sem exigir data de nascimento', function (): void {
+    Schema::table('users', function (Blueprint $table): void {
+        $table->dropColumn('birth_date');
+    });
     Schema::table('users', function (Blueprint $table): void {
         $table->date('birth_date');
     });
