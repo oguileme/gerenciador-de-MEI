@@ -1,4 +1,4 @@
-import { api } from './api'
+import { api, refreshCsrfToken } from '../config/api'
 
 export interface AuthUser {
   id: number
@@ -11,18 +11,18 @@ interface ApiData<T> { data: T }
 
 export const authService = {
   async register(payload: { name: string; email: string; password: string; password_confirmation: string }) {
-    await api.csrf()
-    return (await api.post<ApiData<AuthUser>>('/api/register', payload)).data
+    await refreshCsrfToken()
+    return (await api.post<ApiData<AuthUser>>('/api/register', payload)).data.data
   },
   async login(payload: { email: string; password: string }) {
-    await api.csrf()
-    return (await api.post<ApiData<AuthUser>>('/api/login', payload)).data
+    await refreshCsrfToken()
+    return (await api.post<ApiData<AuthUser>>('/api/login', payload)).data.data
   },
   async currentUser() {
-    return (await api.get<ApiData<AuthUser>>('/api/user')).data
+    return (await api.get<ApiData<AuthUser>>('/api/user')).data.data
   },
   async logout() {
-    await api.csrf()
+    await refreshCsrfToken()
     await api.post<void>('/api/logout')
   },
 }

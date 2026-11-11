@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { ApiError } from '../../../services/api'
+import { ApiError } from '../../../config/api'
 import { useAuth } from '../../../composables/useAuth'
 import type { AuthFieldName, AuthFormValues, AuthMode } from '../types/auth'
 

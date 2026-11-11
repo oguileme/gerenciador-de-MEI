@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { api } from '../../../config/api'
 import AuthForm from '../components/AuthForm.vue'
 import type { AuthMode } from '../types/auth'
 
@@ -86,10 +87,10 @@ describe('Formulários estáticos de autenticação', () => {
   it.each<AuthMode>(['login', 'register'])(
     'envia o formulário de %s sem persistir tokens no navegador',
     async (mode) => {
-      const fetch = vi.fn<typeof globalThis.fetch>()
-        .mockResolvedValueOnce(new Response(null, { status: 204 }))
-        .mockResolvedValueOnce(new Response(JSON.stringify({ data: { id: 1, name: 'Pessoa de Teste', email: 'pessoa@example.com' } }), { status: 200 }))
-      vi.stubGlobal('fetch', fetch)
+      const get = vi.spyOn(api, 'get').mockResolvedValue({} as never)
+      const post = vi.spyOn(api, 'post').mockResolvedValue({
+        data: { data: { id: 1, name: 'Pessoa de Teste', email: 'pessoa@example.com' } },
+      } as never)
       const storage = vi.spyOn(Storage.prototype, 'setItem')
       const wrapper = renderForm(mode)
       if (mode === 'register') {
@@ -99,8 +100,9 @@ describe('Formulários estáticos de autenticação', () => {
       await wrapper.get('#email').setValue('pessoa@example.com')
       await wrapper.get('#password').setValue('senha-ficticia')
       await wrapper.get('form').trigger('submit')
-      expect(fetch).toHaveBeenCalledTimes(2)
-      expect(fetch.mock.calls[1]?.[0]).toBe(`/api/${mode}`)
+      expect(get).toHaveBeenCalledExactlyOnceWith('/sanctum/csrf-cookie')
+      expect(post).toHaveBeenCalledOnce()
+      expect(post.mock.calls[0]?.[0]).toBe(`/api/${mode}`)
       expect(storage).not.toHaveBeenCalled()
       await wrapper.get('#email').setValue('outro@example.com')
       expect(wrapper.find('[role="status"]').exists()).toBe(false)

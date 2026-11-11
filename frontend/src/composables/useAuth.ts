@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { ApiError } from '../services/api'
+import { ApiError } from '../config/api'
 import { authService, type AuthUser } from '../services/auth'
 
 const user = ref<AuthUser | null>(null)
