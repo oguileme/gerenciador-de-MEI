@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
@@ -10,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+final class AuthController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -19,7 +21,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json($user, 201);
+        return response()->json(['data' => $user], 201);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -27,12 +29,12 @@ class AuthController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        return response()->json($request->user());
+        return response()->json(['data' => $request->user()]);
     }
 
     public function user(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        return response()->json(['data' => $request->user()]);
     }
 
     public function logout(Request $request): Response

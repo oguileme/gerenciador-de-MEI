@@ -85,7 +85,7 @@ class AuthenticationTest extends TestCase
         $this->assertAuthenticated();
     }
 
-    public function test_registration_requires_unique_email_and_birth_date(): void
+    public function test_registration_requires_unique_email(): void
     {
         User::factory()->create(['email' => 'existing@example.com']);
 
@@ -96,6 +96,8 @@ class AuthenticationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $response->assertUnprocessable()->assertJsonValidationErrors(['email', 'birth_date']);
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors('email')
+            ->assertJsonMissingValidationErrors('birth_date');
     }
 }

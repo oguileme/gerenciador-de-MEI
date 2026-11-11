@@ -38,6 +38,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create($date);
+
         return response()->json($user, 201);
     }
 
@@ -47,9 +48,10 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
-        if(auth()->user()->id !== $user->id) {
+        if (auth()->user()->id !== $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
+
         return response()->json($user);
     }
 
@@ -68,16 +70,17 @@ class UserController extends Controller
     {
         //
 
-        if(auth()->user()->id !== $user->id) {
+        if (auth()->user()->id !== $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        
+
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
             'birth_date' => 'sometimes|date',
         ]);
 
         $user->update($data);
+
         return response()->json($user);
     }
 
@@ -87,10 +90,11 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
-        if(auth()->user()->id !== $user->id) {
+        if (auth()->user()->id !== $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         $user->update(['deleted_at' => now()]);
+
         return response()->json(['message' => 'User deleted successfully']);
     }
 }
