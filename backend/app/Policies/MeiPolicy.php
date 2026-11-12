@@ -30,6 +30,11 @@ class MeiPolicy
         return $this->ownershipResponse($user, $mei);
     }
 
+    public function importInvoice(User $user, Mei $mei): Response
+    {
+        return $this->ownershipResponse($user, $mei);
+    }
+
     public function delete(User $user, Mei $mei): Response
     {
         return $this->ownershipResponse($user, $mei);
