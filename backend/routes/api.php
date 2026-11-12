@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InvoiceImportController;
 use App\Http\Controllers\MeiController;
 use App\Models\Mei;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/meis', [MeiController::class, 'store'])->can('create', Mei::class);
     Route::get('/meis/{mei}', [MeiController::class, 'show'])->can('view', 'mei');
     Route::match(['put', 'patch'], '/meis/{mei}', [MeiController::class, 'update'])->can('update', 'mei');
+    Route::post('/meis/{mei}/invoices/import', InvoiceImportController::class)
+        ->can('importInvoice', 'mei');
     Route::delete('/meis/{mei}', [MeiController::class, 'destroy'])->can('delete', 'mei');
     Route::post('/meis/{mei}/restore', [MeiController::class, 'restore'])
         ->withTrashed()
