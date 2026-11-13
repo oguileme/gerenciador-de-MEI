@@ -38,8 +38,19 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: () => import('../views/HomeView.vue'),
-      meta: { requiresAuth: true, title: 'Dashboard | Meu MEI' },
+      redirect: { name: 'mei-selection' },
+    },
+    {
+      path: '/meis',
+      name: 'mei-selection',
+      component: () => import('../features/meis/MeiSelectionView.vue'),
+      meta: { requiresAuth: true, title: 'Escolha seu MEI | Meu MEI' },
+    },
+    {
+      path: '/meis/:meiId(\\d+)/dashboard',
+      name: 'mei-dashboard',
+      component: () => import('../features/meis/MeiDashboardView.vue'),
+      meta: { requiresAuth: true, title: 'Painel do MEI | Meu MEI' },
     },
   ],
 })
@@ -51,7 +62,7 @@ router.beforeEach(async (to) => {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
   if ((to.name === 'login' || to.name === 'register') && auth.user.value) {
-    return { name: 'dashboard' }
+    return { name: 'mei-selection' }
   }
 })
 

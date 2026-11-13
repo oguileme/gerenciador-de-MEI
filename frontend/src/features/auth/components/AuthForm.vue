@@ -12,7 +12,7 @@ const form = ref<HTMLFormElement | null>(null)
 
 async function handleSubmit() {
   if (await submit()) {
-    await router.push({ name: 'dashboard' })
+    await router.push({ name: 'mei-selection' })
     return
   }
   await nextTick()
