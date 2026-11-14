@@ -4,6 +4,7 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import { dashboardService } from '@/services/dashboard'
 import { invoiceService } from '@/services/invoices'
 import { meiService } from '@/services/meis'
+import { quoteService } from '@/services/quotes'
 import { ApiError } from '@/config/api'
 import type { DashboardMetrics } from '@/types/dashboard'
 import type { Invoice } from '@/types/invoice'
@@ -18,6 +19,12 @@ vi.mock('@/services/invoices', () => ({ invoiceService: {
   importXml: vi.fn<typeof invoiceService.importXml>(),
 } }))
 vi.mock('@/services/meis', () => ({ meiService: { update: vi.fn<typeof meiService.update>() } }))
+vi.mock('@/services/quotes', () => ({ quoteService: {
+  list: vi.fn<typeof quoteService.list>(), get: vi.fn<typeof quoteService.get>(),
+  create: vi.fn<typeof quoteService.create>(), update: vi.fn<typeof quoteService.update>(),
+  updateStatus: vi.fn<typeof quoteService.updateStatus>(), remove: vi.fn<typeof quoteService.remove>(),
+  downloadPdf: vi.fn<typeof quoteService.downloadPdf>(),
+} }))
 enableAutoUnmount(afterEach)
 const mei: Mei = { id: 1, mei_name: 'Ateliê Exemplo', cnpj: '00000000000100',
   opening_date: '2024-01-01', ibge_municipality_code: '0000000', annual_ceiling: '81000.00',
@@ -47,6 +54,7 @@ async function render() {
 beforeEach(() => {
   vi.mocked(dashboardService.get).mockResolvedValue(metrics)
   vi.mocked(invoiceService.list).mockResolvedValue({ data: [invoice], meta: { current_page: 1, last_page: 1, total: 1 } })
+  vi.mocked(quoteService.list).mockResolvedValue({ data: [], meta: { current_page: 1, last_page: 1, total: 0 } })
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute('open', '') }
 })
 afterEach(() => { vi.resetAllMocks(); document.body.innerHTML = '' })
