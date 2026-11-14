@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/** Agregado fiscal pertencente a uma conta e raiz de acesso para suas notas. */
 class Mei extends Model
 {
     /** @use HasFactory<MeiFactory> */

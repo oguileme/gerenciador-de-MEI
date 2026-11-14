@@ -4,7 +4,12 @@ import { invoiceService } from '@/services/invoices'
 import type { Invoice, InvoiceStatus } from '@/types/invoice'
 import { useMeiSession } from '@/features/meis/composables/useMeiSession'
 
-/** Mantém listagem e mutações restritas ao MEI da instância atual do painel. */
+/**
+ * Mantém listagem, alteração de status e importação no contexto do MEI atual.
+ *
+ * Após uma mutação, recarrega notas e métricas em paralelo para não conservar totais
+ * incompatíveis com a fonte de verdade do backend.
+ */
 export function useInvoices(meiId: string, changed: () => Promise<void>) {
   const invoices = ref<Invoice[]>([])
   const page = ref(1)
@@ -64,6 +69,8 @@ export function useInvoices(meiId: string, changed: () => Promise<void>) {
     uploads.value = []
     let imported = false
     try {
+      // O envio sequencial preserva um resultado por arquivo e evita recarregar o
+      // painel entre uploads.
       for (const file of files) {
         if (disposed) break
         try {

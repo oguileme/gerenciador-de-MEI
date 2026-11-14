@@ -9,6 +9,7 @@ use App\Enums\InvoiceType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/** Fonte de verdade fiscal extraída do XML; o status decide sua participação no faturamento. */
 class Invoice extends Model
 {
     protected $fillable = [

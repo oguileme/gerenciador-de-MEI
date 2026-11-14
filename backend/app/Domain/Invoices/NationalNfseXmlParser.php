@@ -12,6 +12,12 @@ use DOMElement;
 use DOMXPath;
 use Throwable;
 
+/**
+ * Valida uma NFS-e nacional contra o XSD oficial e extrai apenas os campos do domínio.
+ *
+ * O processamento bloqueia DTDs, entidades externas e acesso à rede antes de normalizar
+ * dinheiro e datas para os formatos esperados pelo restante da aplicação.
+ */
 final class NationalNfseXmlParser implements InvoiceXmlParser
 {
     private const NAMESPACE = 'http://www.sped.fazenda.gov.br/nfse';
@@ -22,6 +28,7 @@ final class NationalNfseXmlParser implements InvoiceXmlParser
 
     public function parse(string $xml): ParsedInvoiceData
     {
+        // Rejeitar a declaração inteira evita que futuras opções do libxml reabram vetores de XXE.
         if (preg_match('/<!DOCTYPE/i', $xml) === 1) {
             throw new InvalidInvoiceXml('XML com DOCTYPE não é permitido.');
         }
@@ -81,6 +88,8 @@ final class NationalNfseXmlParser implements InvoiceXmlParser
 
     private function loadDocument(string $xml): DOMDocument
     {
+        // Erros do XML viram exceções de domínio; detalhes do documento não chegam
+        // à resposta ou aos logs.
         $previousState = libxml_use_internal_errors(true);
 
         try {
@@ -100,6 +109,7 @@ final class NationalNfseXmlParser implements InvoiceXmlParser
 
     private function validateSchema(DOMDocument $document, string $version): void
     {
+        // A versão declarada escolhe um XSD local; o servidor nunca busca schemas pela rede.
         $schemaPath = sprintf('%s/%s/NFSe_v%s.xsd', $this->schemaDirectory, $version, $version);
 
         if (! is_file($schemaPath)) {
@@ -122,6 +132,7 @@ final class NationalNfseXmlParser implements InvoiceXmlParser
 
     private function requiredValue(DOMXPath $xpath, string $expression): string
     {
+        // Campo fiscal ausente invalida todo o documento em vez de assumir um valor padrão.
         $value = $this->optionalValue($xpath, $expression);
 
         if ($value === null) {
@@ -146,6 +157,7 @@ final class NationalNfseXmlParser implements InvoiceXmlParser
 
     private function normalizeAmount(string $amount): string
     {
+        // A string decimal preserva centavos e impede perda de precisão por ponto flutuante.
         if (preg_match('/^(0|[1-9][0-9]{0,14})(?:\.[0-9]{2})?$/', $amount) !== 1) {
             throw new InvalidInvoiceXml('O XML contém um valor monetário inválido.');
         }
@@ -155,6 +167,7 @@ final class NationalNfseXmlParser implements InvoiceXmlParser
 
     private function issueDate(string $dateTime): string
     {
+        // dhProc representa um instante; ele precisa do fuso fiscal antes de virar uma data.
         try {
             return (new DateTimeImmutable($dateTime))
                 ->setTimezone(new DateTimeZone('America/Sao_Paulo'))

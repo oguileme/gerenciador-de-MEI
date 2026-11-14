@@ -3,7 +3,7 @@ import { ApiError } from '../../../config/api'
 import { useAuth } from '../../../composables/useAuth'
 import type { AuthFieldName, AuthFormValues, AuthMode } from '../types/auth'
 
-/** Valida a prévia local sem enviar, persistir dados ou simular uma sessão autenticada. */
+/** Valida a interação local e delega a sessão real ao composable compartilhado de autenticação. */
 export function useAuthForm(mode: AuthMode) {
   const auth = useAuth()
   const values = reactive<AuthFormValues>({

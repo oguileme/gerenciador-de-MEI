@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Invoices;
 
+/** Resultado normalizado do parser; transporta dados fiscais sem depender do Laravel. */
 final readonly class ParsedInvoiceData
 {
     public function __construct(

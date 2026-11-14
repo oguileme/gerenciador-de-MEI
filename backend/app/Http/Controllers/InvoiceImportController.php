@@ -12,6 +12,7 @@ use App\Models\Mei;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/** Lê o upload validado e entrega o conteúdo bruto à ação responsável pela importação. */
 class InvoiceImportController extends Controller
 {
     public function __invoke(

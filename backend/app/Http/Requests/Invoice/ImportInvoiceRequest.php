@@ -6,6 +6,11 @@ namespace App\Http\Requests\Invoice;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Aceita somente o arquivo; todos os campos fiscais são derivados do XML no backend.
+ *
+ * Proibir campos adicionais evita que o cliente substitua dados com validade fiscal.
+ */
 class ImportInvoiceRequest extends FormRequest
 {
     public function authorize(): bool
