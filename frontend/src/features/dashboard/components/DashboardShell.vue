@@ -9,6 +9,7 @@ import RevenueOverview from './RevenueOverview.vue'
 import MonthlyChart from './MonthlyChart.vue'
 import InvoiceList from './InvoiceList.vue'
 import DashboardSettings from './DashboardSettings.vue'
+import QuoteSection from '@/features/quotes/components/QuoteSection.vue'
 
 const props = defineProps<{ mei: Mei }>()
 const emit = defineEmits<{ updated: [mei: Mei] }>()
@@ -55,6 +56,9 @@ async function saved(mei?: Mei) {
         <a href="#invoices" :class="{ current: selectedSection === 'invoices' }" @click="selectedSection = 'invoices'">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h9l3 3v15H6zM9 10h6M9 14h6M9 18h3" /></svg>Notas fiscais
         </a>
+        <a href="#quotes" :class="{ current: selectedSection === 'quotes' }" @click="selectedSection = 'quotes'">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 3h14v18H5zM8 8h8M8 12h8M8 16h4" /></svg>Orçamentos
+        </a>
         <button @click="openSettings('mei')">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 21V7l8-4 8 4v14M2 21h20M9 21v-6h6v6M8 8h1m6 0h1M8 11h1m6 0h1" /></svg>Dados do MEI
         </button>
@@ -87,6 +91,7 @@ async function saved(mei?: Mei) {
         </div>
       </template>
       <InvoiceList ref="invoiceList" :mei-id="String(mei.id)" :refresh-metrics="load" />
+      <QuoteSection :mei-id="String(mei.id)" :mei-name="mei.mei_name" />
       <footer>Meu MEI. Seu negócio em dia.</footer>
     </main>
     <DashboardSettings v-if="settings && (settings === 'mei' || metrics)" :mei="mei" :mode="settings" :year="year ?? 0" :amount="metrics?.ceiling.amount ?? '0.00'" @close="closeSettings" @saved="saved" />
@@ -441,7 +446,9 @@ footer {
     display: flex;
     width: 100%;
     gap: 4px;
+    overflow-x: auto;
   }
+  nav a, nav button { flex: 0 0 auto; }
   nav a, nav button {
     padding: 10px;
     font-size: 12px;
