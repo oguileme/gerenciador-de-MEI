@@ -58,7 +58,7 @@ h1 {
 .hero-description {
   max-width: 410px;
   margin: 25px 0 30px;
-  color: #596b5e;
+  color: var(--color-muted);
   font-size: 15px;
   line-height: 1.9;
 }
@@ -81,7 +81,7 @@ h1 {
   text-decoration: none;
 }
 .primary-action {
-  color: var(--color-paper);
+  color: var(--color-on-accent);
   background: var(--color-forest);
 }
 .primary-action:hover {
@@ -91,11 +91,11 @@ h1 {
   background: transparent;
 }
 .secondary-action:hover {
-  background: #ffffff70;
+  background: color-mix(in srgb, var(--color-paper) 44%, transparent);
 }
 .preview-note {
   margin: 17px 0 0;
-  color: #596b5e;
+  color: var(--color-muted);
   font-size: 11px;
 }
 .hero-art {
@@ -108,7 +108,7 @@ h1 {
 }
 figcaption {
   margin-top: 17px;
-  color: #52654e;
+  color: var(--color-muted);
   font-size: 12px;
   font-weight: 600;
   text-align: center;

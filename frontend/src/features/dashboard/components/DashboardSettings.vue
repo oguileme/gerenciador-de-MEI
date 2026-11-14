@@ -56,11 +56,11 @@ dialog {
   border-radius: 22px;
   padding: 30px;
   color: var(--color-text);
-  background: white;
+  background: var(--color-paper);
 }
 
 dialog::backdrop {
-  background: #18332466;
+  background: var(--color-overlay);
 }
 
 h2 {
@@ -91,7 +91,7 @@ input {
   border: 1px solid var(--color-border);
   border-radius: 9px;
   color: var(--color-text);
-  background: white;
+  background: var(--color-surface-soft);
 }
 
 input[aria-invalid='true'] {

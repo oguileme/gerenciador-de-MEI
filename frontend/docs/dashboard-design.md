@@ -7,6 +7,7 @@ nem regras de negócio. A tela mantém a identidade do Meu MEI e a fonte Manrope
 
 Paleta: floresta #254E3A, sálvia #EAF1E7, fundo #F3F5F0, branco #FFFFFF,
 amarelo #93610C e vermelho #A23832. Alertas têm texto e cor, nunca apenas cor.
+As variantes clara e escura seguem os tokens de [`theme-design.md`](theme-design.md).
 Tipografia: título 30px/700, valor anual 40px/700, títulos de seção 18px/700,
 corpo 14px e dados auxiliares 12px. Valores com algarismos tabulares.
 

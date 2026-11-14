@@ -2,6 +2,7 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppBrand from '@/components/AppBrand.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import type { Mei } from '@/types/mei'
 import MeiProfile from './components/MeiProfile.vue'
 import CreateMeiDialog from './components/CreateMeiDialog.vue'
@@ -27,7 +28,7 @@ function openCreated(mei: Mei) {
 
 <template>
   <div class="selection-page">
-    <header><AppBrand /></header>
+    <header><AppBrand /><ThemeToggle /></header>
     <main aria-labelledby="selection-title">
       <h1 id="selection-title">Qual MEI você quer acessar?</h1>
       <p class="intro">Escolha seu negócio para abrir o painel.</p>
@@ -74,6 +75,10 @@ function openCreated(mei: Mei) {
 }
 
 header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
   padding: 36px 4.5vw;
 }
 
@@ -137,9 +142,9 @@ h1 {
   width: 148px;
   height: 148px;
   margin-bottom: 22px;
-  border: 1px dashed #a6b6a7;
+  border: 1px dashed var(--color-border);
   border-radius: 38px;
-  background: #f8faf7;
+  background: var(--color-surface-soft);
 }
 
 .add-icon svg {

@@ -36,7 +36,7 @@ import AppBrand from '@/components/AppBrand.vue'
   gap: 40px;
   padding: 48px 60px;
   border-radius: 24px;
-  color: var(--color-paper);
+  color: var(--color-on-accent);
   background: var(--color-forest);
 }
 h2 {
@@ -48,7 +48,7 @@ h2 {
 }
 .closing > div > p {
   margin: 15px 0 0;
-  color: #d4e3cd;
+  color: color-mix(in srgb, var(--color-on-accent) 78%, var(--color-forest));
   font-size: 13px;
   line-height: 1.8;
 }
@@ -71,14 +71,14 @@ h2 {
   text-decoration: none;
 }
 .signup-link:hover {
-  background: var(--color-paper);
+  background: var(--color-surface-raised);
 }
 .closing-actions p a {
   display: inline-flex;
   min-height: 32px;
   align-items: center;
   margin-left: 4px;
-  color: white;
+  color: var(--color-on-accent);
   font-weight: 700;
 }
 .closing a:focus-visible {

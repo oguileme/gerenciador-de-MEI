@@ -128,7 +128,7 @@ h2 {
 select {
   font: inherit;
   color: var(--color-text);
-  background: white;
+  background: var(--color-paper);
   border: 1px solid var(--color-border);
   padding: 9px 12px;
   border-radius: 8px;
@@ -162,12 +162,12 @@ th {
   font-size: 11px;
   font-weight: 500;
   padding: 12px;
-  background: #f7f9f6;
+  background: var(--color-surface-soft);
 }
 
 td {
   padding: 17px 12px;
-  border-bottom: 1px solid #edf0e9;
+  border-bottom: 1px solid var(--color-grid);
 }
 
 .customer {
@@ -198,12 +198,12 @@ td {
 
 .cancelled {
   color: var(--color-error);
-  background: #faf0ee;
+  background: var(--color-error-soft);
 }
 
 .substituted {
-  color: #6b5b3c;
-  background: #f7f2e7;
+  color: var(--color-warning);
+  background: var(--color-warning-soft);
 }
 
 .detail-button {
@@ -234,7 +234,7 @@ td {
 }
 
 .details {
-  background: #f7f9f6;
+  background: var(--color-surface-soft);
 }
 
 dl {

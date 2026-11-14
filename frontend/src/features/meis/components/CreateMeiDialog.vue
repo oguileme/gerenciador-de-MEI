@@ -61,7 +61,7 @@ dialog {
 }
 
 dialog::backdrop {
-  background: #18332466;
+  background: var(--color-overlay);
 }
 
 h2 {

@@ -50,7 +50,7 @@ const states = { safe: 'Dentro da faixa segura', warning: 'Atenção ao limite',
 }
 
 .annual-card {
-  color: white;
+  color: var(--color-on-accent);
   background: var(--color-forest);
 }
 
@@ -72,29 +72,29 @@ h2 {
 
 .annual-description {
   font-size: 11px;
-  color: #d8e6d4;
+  color: color-mix(in srgb, var(--color-on-accent) 78%, var(--color-forest));
   margin: 8px 0 24px;
 }
 
 .limit-track {
   height: 5px;
   border-radius: 4px;
-  background: #ffffff30;
+  background: color-mix(in srgb, var(--color-on-accent) 18%, transparent);
   overflow: hidden;
 }
 
 .limit-track span {
   display: block;
   height: 100%;
-  background: #c5e2ad;
+  background: var(--color-track-safe);
 }
 
 .limit-track.warning span {
-  background: #f4cb6f;
+  background: var(--color-track-warning);
 }
 
 .limit-track.danger span {
-  background: #ffa69a;
+  background: var(--color-track-danger);
 }
 
 .limit-caption {
@@ -107,7 +107,7 @@ h2 {
 }
 
 .limit-caption button {
-  color: white;
+  color: var(--color-on-accent);
   background: none;
   border: 0;
   padding: 6px 0;
@@ -117,7 +117,7 @@ h2 {
 
 .metric-card {
   border: 1px solid var(--color-border);
-  background: white;
+  background: var(--color-paper);
 }
 
 .metric-card h2 {
@@ -147,7 +147,7 @@ h2 {
 }
 
 .projection-warning {
-  color: #93610c;
+  color: var(--color-warning);
 }
 
 .scope-note {
@@ -169,7 +169,7 @@ h2 {
 }
 
 .state.warning {
-  color: #93610c;
+  color: var(--color-warning);
 }
 
 .state.danger {

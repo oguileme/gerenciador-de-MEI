@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue'
 import AppBrand from '@/components/AppBrand.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import type { Mei } from '@/types/mei'
 import { formatMoney } from '@/utils/format'
 import { useDashboard } from '../composables/useDashboard'
@@ -58,7 +59,7 @@ async function saved(mei?: Mei) {
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 21V7l8-4 8 4v14M2 21h20M9 21v-6h6v6M8 8h1m6 0h1M8 11h1m6 0h1" /></svg>Dados do MEI
         </button>
       </nav>
-      <div class="sidebar-bottom"><RouterLink :to="{ name: 'mei-selection' }">Trocar MEI</RouterLink><p>Um negócio de cada vez.<br>Tudo no seu lugar.</p></div>
+      <div class="sidebar-bottom"><ThemeToggle /><RouterLink :to="{ name: 'mei-selection' }">Trocar MEI</RouterLink><p>Um negócio de cada vez.<br>Tudo no seu lugar.</p></div>
     </aside>
     <main id="overview">
       <header class="dashboard-heading">
@@ -97,14 +98,14 @@ async function saved(mei?: Mei) {
   display: grid;
   grid-template-columns: 224px minmax(0, 1fr);
   min-height: 100svh;
-  background: #f3f5f0;
+  background: var(--color-canvas);
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   padding: 32px 22px;
-  background: white;
+  background: var(--color-paper);
   border-right: 1px solid var(--color-border);
   position: sticky;
   top: 0;
@@ -168,7 +169,7 @@ nav .current {
 }
 
 nav a:hover, nav button:hover {
-  background: #f3f5f0;
+  background: var(--color-surface-soft);
   color: var(--color-forest);
 }
 
@@ -184,6 +185,11 @@ nav svg {
 .sidebar-bottom {
   margin-top: auto;
   padding: 24px 10px 0;
+}
+
+.sidebar-bottom :deep(.theme-toggle) {
+  width: 100%;
+  margin-bottom: 12px;
 }
 
 .sidebar-bottom a {
@@ -249,7 +255,7 @@ h1 {
   font: inherit;
   border: 1px solid var(--color-border);
   border-radius: 9px;
-  background: white;
+  background: var(--color-paper);
   color: var(--color-text);
   padding: 10px;
 }
@@ -269,7 +275,7 @@ h1 {
 
 .dashboard-shell :deep(.button-primary) {
   background: var(--color-forest);
-  color: white;
+  color: var(--color-on-accent);
   border-color: var(--color-forest);
 }
 
@@ -278,7 +284,7 @@ h1 {
 }
 
 .dashboard-shell :deep(.button-secondary) {
-  background: white;
+  background: var(--color-paper);
   color: var(--color-forest);
 }
 
@@ -298,7 +304,7 @@ h1 {
   padding: 26px;
   border: 1px solid var(--color-border);
   border-radius: 20px;
-  background: #eaf1e7;
+  background: var(--color-sage);
 }
 
 .ceiling-panel h2 {
@@ -308,7 +314,7 @@ h1 {
 }
 
 .ceiling-description {
-  color: #52634f;
+  color: var(--color-muted);
   font-size: 11px;
   margin: 8px 0 16px;
 }
@@ -324,13 +330,13 @@ h1 {
 .remaining {
   display: grid;
   gap: 4px;
-  border-top: 1px solid #cfddc9;
+  border-top: 1px solid var(--color-border);
   padding-top: 17px;
 }
 
 .remaining span {
   font-size: 11px;
-  color: #52634f;
+  color: var(--color-muted);
 }
 
 .remaining strong {
@@ -360,7 +366,7 @@ h1 {
 }
 
 .warning {
-  background: #93610c;
+  background: var(--color-warning);
 }
 
 .danger {
@@ -370,7 +376,7 @@ h1 {
 .loading-panel {
   padding: 60px 24px;
   text-align: center;
-  background: white;
+  background: var(--color-paper);
   border-radius: 20px;
   margin-bottom: 26px;
   color: var(--color-muted);

@@ -45,18 +45,18 @@ const cnpj = computed(() => props.mei.cnpj.replace(
 }
 
 .tone-1 {
-  background: #e1ebdf;
-  color: #3d6145;
+  background: var(--color-sage);
+  color: var(--color-forest);
 }
 
 .tone-2 {
-  background: #e2e9f0;
-  color: #415d79;
+  background: var(--color-info-soft);
+  color: var(--color-info);
 }
 
 .tone-3 {
-  background: #efe4d6;
-  color: #795a36;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
 }
 
 .name {

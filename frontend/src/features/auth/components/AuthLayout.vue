@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import AppBrand from '@/components/AppBrand.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import illustration from '@/assets/auth/entrepreneur-cutout.png'
 import type { AuthMode } from '../types/auth'
 import AuthIcon from './AuthIcon.vue'
@@ -40,12 +41,15 @@ defineProps<{ mode: AuthMode }>()
       </section>
 
       <section class="form-panel" aria-labelledby="auth-title">
-        <p class="account-switch">
-          {{ mode === 'login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?' }}
-          <RouterLink :to="mode === 'login' ? '/register' : '/login'">
-            {{ mode === 'login' ? 'Criar conta' : 'Entrar' }}
-          </RouterLink>
-        </p>
+        <div class="form-toolbar">
+          <ThemeToggle />
+          <p class="account-switch">
+            {{ mode === 'login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?' }}
+            <RouterLink :to="mode === 'login' ? '/register' : '/login'">
+              {{ mode === 'login' ? 'Criar conta' : 'Entrar' }}
+            </RouterLink>
+          </p>
+        </div>
         <div class="form-content"><slot /></div>
         <p class="form-footer"><AuthIcon name="leaf" /> Um pouco de organização. Mais tranquilidade.</p>
       </section>
@@ -70,10 +74,10 @@ defineProps<{ mode: AuthMode }>()
   min-height: 750px;
   margin: auto;
   padding: 10px;
-  border: 1px solid #e5e9e1;
+  border: 1px solid var(--color-border);
   border-radius: 28px;
   background: var(--color-paper);
-  box-shadow: 0 16px 64px #29473106;
+  box-shadow: 0 16px 64px var(--color-shadow);
 }
 
 .story-panel {
@@ -100,7 +104,7 @@ defineProps<{ mode: AuthMode }>()
 
 .story-heading p {
   margin: 17px 0 0;
-  color: #596b5e;
+  color: var(--color-muted);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -123,7 +127,7 @@ defineProps<{ mode: AuthMode }>()
   font-weight: 700;
 }
 .story-caption span {
-  color: #596b5e;
+  color: var(--color-muted);
   font-size: 12px;
 }
 
@@ -133,7 +137,7 @@ defineProps<{ mode: AuthMode }>()
   gap: 22px;
   margin: 28px 0 0;
   padding: 21px 0 0;
-  border-top: 1px solid #cedbc8;
+  border-top: 1px solid var(--color-border);
   list-style: none;
 }
 
@@ -155,8 +159,15 @@ defineProps<{ mode: AuthMode }>()
   padding: 32px 44px 25px;
 }
 
+.form-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .account-switch {
-  margin: 5px 0 28px;
+  margin: 5px 0;
   color: var(--color-muted);
   font-size: 12px;
   text-align: right;
@@ -174,7 +185,7 @@ defineProps<{ mode: AuthMode }>()
   width: 100%;
   max-width: 370px;
   margin: auto;
-  padding: 24px 0;
+  padding: 38px 0 24px;
 }
 .form-footer {
   display: flex;
@@ -191,7 +202,7 @@ defineProps<{ mode: AuthMode }>()
 }
 .page-footer {
   margin-top: 24px;
-  color: #737d74;
+  color: var(--color-muted);
   font-size: 11px;
   text-align: center;
 }

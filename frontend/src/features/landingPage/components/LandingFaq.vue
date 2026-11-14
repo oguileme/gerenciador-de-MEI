@@ -85,7 +85,7 @@ summary:hover {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-  color: #6b8060;
+  color: var(--color-muted);
 }
 .toggle-mark::before,
 .toggle-mark::after {

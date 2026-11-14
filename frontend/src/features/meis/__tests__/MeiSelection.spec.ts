@@ -56,7 +56,7 @@ describe('Seleção de MEIs', () => {
     expect(wrapper.text()).toContain('Seu primeiro MEI começa aqui.')
     await wrapper.get('.add-profile').trigger('click')
     expect(wrapper.get('dialog').attributes('aria-labelledby')).toBe('create-mei-title')
-    await wrapper.get('button[type="button"]').trigger('click')
+    await wrapper.get('dialog button[type="button"]').trigger('click')
     expect(wrapper.find('dialog').exists()).toBe(false)
     expect(document.activeElement).toBe(wrapper.get('.add-profile').element)
   })

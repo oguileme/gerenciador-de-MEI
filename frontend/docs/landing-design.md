@@ -10,6 +10,7 @@ A navegação entre rotas volta ao topo, preservando a posição ao usar voltar/
 
 Continuidade das telas aprovadas: Manrope local, floresta #254E3A, sálvia #EAF1E7,
 folha #AFC69A, branco #FFFFFF, cinza #67716B e ocre #D6B475 na ilustração.
+As variantes clara e escura seguem os tokens de [`theme-design.md`](theme-design.md).
 Abertura em duas colunas, títulos alinhados à esquerda, ilustração como destaque,
 recursos sem cartões flutuantes e sem gráficos decorativos. A numeração aparece
 somente na sequência de uso. No celular, navegação explícita e composição empilhada.
@@ -40,4 +41,3 @@ Composition: landscape 4:3, complete character and desktop, simplified desk legs
 Palette: forest #254E3A, sage #EAF1E7, muted leaf #AFC69A, warm white #FAFBF7, small ochre accents #D6B475.
 Constraints: genuinely transparent outer background with alpha. Keep the organic green shape opaque. No lettering, numbers, charts, graphs, money symbols, logos, watermark, UI cards, decorative sparkle, floating objects or gradients. Laptop screen is blank. This is an illustration of organizing a business, not a screenshot of an app.
 ```
-

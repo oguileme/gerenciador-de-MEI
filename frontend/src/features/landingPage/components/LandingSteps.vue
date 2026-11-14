@@ -49,9 +49,9 @@ const steps = [
   align-items: center;
   gap: 70px;
   padding: 58px 54px;
-  border: 1px solid #e1e8db;
+  border: 1px solid var(--color-border);
   border-radius: 24px;
-  background: #f1f5ed;
+  background: var(--color-surface-soft);
   scroll-margin-top: 28px;
 }
 .leaf-mark {
@@ -59,7 +59,7 @@ const steps = [
   width: 43px;
   height: 43px;
   margin-bottom: 22px;
-  color: #789466;
+  color: var(--color-leaf);
 }
 .leaf-mark svg {
   width: 100%;
@@ -98,7 +98,7 @@ li {
   height: 33px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid #b7c9ac;
+  border: 1px solid var(--color-border);
   border-radius: 50%;
   color: var(--color-forest);
   font-size: 12px;

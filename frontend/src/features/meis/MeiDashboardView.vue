@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppBrand from '@/components/AppBrand.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import DashboardShell from '@/features/dashboard/components/DashboardShell.vue'
 import { useMeiDashboard } from './composables/useMeiDashboard'
 
@@ -9,7 +10,7 @@ const { mei, error, loading, load } = useMeiDashboard()
 <template>
   <DashboardShell v-if="mei" :key="mei.id" :mei="mei" @updated="mei = $event" />
   <div v-else class="dashboard-handoff">
-    <header><AppBrand /><RouterLink :to="{ name: 'mei-selection' }">Trocar MEI</RouterLink></header>
+    <header><AppBrand /><div class="handoff-actions"><ThemeToggle /><RouterLink :to="{ name: 'mei-selection' }">Trocar MEI</RouterLink></div></header>
     <main>
       <p v-if="loading" role="status">Abrindo seu MEI…</p>
       <div v-else-if="error" role="alert"><p>{{ error }}</p><button @click="load">Tentar novamente</button></div>
@@ -29,6 +30,12 @@ header {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+}
+
+.handoff-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 main {

@@ -91,7 +91,7 @@ h2 {
   place-items: center;
   border-radius: 13px;
   color: var(--color-forest);
-  background: #edf2e8;
+  background: var(--color-surface-soft);
 }
 .feature-icon svg {
   width: 24px;

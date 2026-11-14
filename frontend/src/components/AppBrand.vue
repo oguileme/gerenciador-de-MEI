@@ -51,7 +51,7 @@ import { RouterLink } from 'vue-router'
 }
 
 .brand-dot {
-  color: #61814e;
+  color: var(--color-leaf);
 }
 
 @media (max-width: 760px) {

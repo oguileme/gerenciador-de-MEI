@@ -27,6 +27,7 @@ composição do domínio do MEI. Campos e textos alinhados à esquerda; ilustra�
 
 Paleta: floresta #254E3A, sálvia #EAF1E7, folha #AFC69A, branco #FFFFFF,
 cinza #67716B e ocre #D6B475 na ilustração.
+As variantes clara e escura seguem os tokens de [`theme-design.md`](theme-design.md).
 Tipografia: Manrope variável, servida localmente, com licença em
 `src/assets/fonts/OFL.txt`. Fonte: https://github.com/google/fonts/tree/main/ofl/manrope.
 

@@ -40,7 +40,7 @@ const labels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', '
 <style scoped>
 .chart-panel {
   min-width: 0;
-  background: white;
+  background: var(--color-paper);
   padding: 26px;
   border: 1px solid var(--color-border);
   border-radius: 20px;
@@ -108,7 +108,7 @@ h2 {
   height: calc(var(--plot-height) + var(--month-label-height));
   gap: 12px;
   margin-top: 26px;
-  background: repeating-linear-gradient(to top, transparent 0, transparent 49px, #edf0e9 49px, #edf0e9 50px);
+  background: repeating-linear-gradient(to top, transparent 0, transparent 49px, var(--color-grid) 49px, var(--color-grid) 50px);
 }
 
 .month {
@@ -136,7 +136,7 @@ h2 {
   display: block;
   width: min(100%, 34px);
   border-radius: 7px 7px 2px 2px;
-  background: #b8cfb0;
+  background: var(--color-chart-bar);
 }
 
 .selected .bar {
@@ -144,7 +144,7 @@ h2 {
 }
 
 .month:hover .bar, .month:focus-visible .bar {
-  background: #61814e;
+  background: var(--color-leaf);
 }
 
 .month-label {
@@ -166,7 +166,7 @@ h2 {
   left: 50%;
   transform: translateX(-50%);
   background: var(--color-forest);
-  color: white;
+  color: var(--color-on-accent);
   border-radius: 6px;
   padding: 5px 8px;
   font-size: 10px;
