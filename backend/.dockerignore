@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.idea
+.vscode
+node_modules
+public/build
+storage/app/private/*
+storage/logs/*
+vendor

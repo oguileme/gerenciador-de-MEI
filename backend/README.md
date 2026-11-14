@@ -56,3 +56,23 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Dashboard e acompanhamento de faturamento
+
+O dashboard requer a extensão PHP **BCMath** (`ext-bcmath`, declarada no Composer).
+Aplique as migrations com `php artisan migrate` no ambiente desejado; a nova tabela
+`mei_annual_limits` armazena apenas limites configurados por MEI e ano, nunca totais.
+
+- `GET /api/meis/{mei}/dashboard?year=2026`: totais anuais, 12 meses, uso do limite e projeção.
+- `PUT /api/meis/{mei}/annual-limit`: `{ "year": 2026, "amount": "81000.00" }`.
+- `GET /api/meis/{mei}/invoices?page=1&status=active`: notas paginadas, filtro opcional.
+- `PATCH /api/meis/{mei}/invoices/{invoice}/status`: somente `status`.
+
+Todas as rotas exigem Sanctum e autorização pelo MEI. O faturamento considera apenas
+notas ativas, pelo valor bruto e data de emissão. O limite anual informado é integral,
+sem proporcionalidade. As faixas ficam em `config/dashboard.php` (80% e 95%); não há
+notificação ao atingir 100%. Cada MEI possui uma referência inicial de R$ 81.000,00
+em `annual_ceiling`; um limite configurado para um ano específico tem prioridade. Esses
+valores servem ao acompanhamento e não representam garantia de enquadramento legal.
+
+Veja [decisões, cálculo da projeção e integração](../frontend/docs/dashboard-design.md).

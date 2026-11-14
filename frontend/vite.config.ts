@@ -4,6 +4,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8000'
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -13,6 +15,12 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  server: {
+    proxy: {
+      '/api': backendUrl,
+      '/sanctum': backendUrl,
     },
   },
 })
