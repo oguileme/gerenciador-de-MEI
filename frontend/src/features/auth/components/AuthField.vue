@@ -71,11 +71,11 @@ const inputType = computed(() => props.type === 'password' && passwordVisible.va
   align-items: center;
   border: 1px solid var(--color-border);
   border-radius: 9px;
-  background: #fdfefc;
+  background: var(--color-surface-soft);
 }
 .input-wrap:focus-within {
   border-color: var(--color-focus);
-  box-shadow: 0 0 0 3px #39795514;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 12%, transparent);
 }
 .input-wrap.has-error {
   border-color: var(--color-error);
@@ -84,7 +84,7 @@ const inputType = computed(() => props.type === 'password' && passwordVisible.va
   width: 17px;
   height: 17px;
   margin-left: 15px;
-  color: #879187;
+  color: var(--color-muted);
 }
 input {
   width: 100%;
@@ -99,7 +99,7 @@ input {
   font-size: 13px;
 }
 input::placeholder {
-  color: #7d867f;
+  color: var(--color-muted);
   opacity: 1;
 }
 .password-toggle {

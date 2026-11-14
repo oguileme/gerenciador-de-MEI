@@ -8,24 +8,82 @@
 
 :root {
   font-family: Manrope, 'Segoe UI', sans-serif;
-  color: #253b30;
-  background: #f3f5f0;
+  color: var(--color-text);
+  background: var(--color-canvas);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color-scheme: light;
 
+  --color-canvas: #f3f5f0;
+  --color-page: #fbfcf9;
   --color-forest: #254e3a;
   --color-forest-hover: #193d2b;
   --color-sage: #eaf1e7;
   --color-leaf: #afc69a;
   --color-paper: #ffffff;
+  --color-surface-soft: #f7f9f6;
+  --color-surface-raised: #ffffff;
   --color-text: #253b30;
   --color-muted: #67716b;
   --color-border: #dce2da;
   --color-error: #a23832;
+  --color-error-soft: #faf0ee;
+  --color-warning: #93610c;
+  --color-warning-soft: #f7f2e7;
+  --color-info: #415d79;
+  --color-info-soft: #e2e9f0;
   --color-focus: #397955;
+  --color-on-accent: #ffffff;
+  --color-grid: #edf0e9;
+  --color-overlay: #18332466;
+  --color-shadow: #2947310f;
+  --color-selection: #d5e6c9;
+  --color-chart-bar: #b8cfb0;
+  --color-track-safe: #c5e2ad;
+  --color-track-warning: #f4cb6f;
+  --color-track-danger: #ffa69a;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-canvas: #101713;
+  --color-page: #101713;
+  --color-forest: #a8cfad;
+  --color-forest-hover: #c0dec3;
+  --color-sage: #26382c;
+  --color-leaf: #7fa987;
+  --color-paper: #18211c;
+  --color-surface-soft: #202b24;
+  --color-surface-raised: #243128;
+  --color-text: #edf3ec;
+  --color-muted: #aab7ad;
+  --color-border: #34443a;
+  --color-error: #ff9b92;
+  --color-error-soft: #432725;
+  --color-warning: #e2bc68;
+  --color-warning-soft: #3b3321;
+  --color-info: #a8c6e5;
+  --color-info-soft: #253747;
+  --color-focus: #b7dbbc;
+  --color-on-accent: #102016;
+  --color-grid: #2b3930;
+  --color-overlay: #050907b8;
+  --color-shadow: #00000052;
+  --color-selection: #355c40;
+  --color-chart-bar: #668a6e;
+  --color-track-safe: #75a57c;
+  --color-track-warning: #d3aa51;
+  --color-track-danger: #d87b74;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color: #edf3ec;
+    background: #101713;
+    color-scheme: dark;
+  }
 }
 
 *,
@@ -39,6 +97,8 @@ body {
   margin: 0;
   font-size: 14px;
   line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-canvas);
 }
 
 button,
@@ -73,5 +133,5 @@ a {
 
 ::selection {
   color: var(--color-forest);
-  background: #d5e6c9;
+  background: var(--color-selection);
 }

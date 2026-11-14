@@ -54,6 +54,7 @@ it('associa o novo MEI ao usuário autenticado e não expõe user_id', function 
     $response
         ->assertCreated()
         ->assertJsonPath('data.cnpj', '12345678000199')
+        ->assertJsonPath('data.annual_ceiling', '81000.00')
         ->assertJsonMissingPath('data.user_id');
     $this->assertDatabaseHas('mei', [
         'cnpj' => '12345678000199',
@@ -71,6 +72,23 @@ it('rejeita tentativa de escolher o proprietário do MEI', function (): void {
         ->assertJsonValidationErrors('user_id');
 
     $this->assertDatabaseMissing('mei', ['cnpj' => '12345678000199']);
+});
+
+it('rejeita tentativa de definir o teto-base anual pela API', function (): void {
+    $user = User::factory()->create();
+    $mei = Mei::factory()->for($user)->create();
+
+    $this->actingAs($user)
+        ->postJson('/api/meis', validMeiPayload(['annual_ceiling' => '90000.00']))
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('annual_ceiling');
+
+    $this->actingAs($user)
+        ->patchJson("/api/meis/{$mei->id}", ['annual_ceiling' => '90000.00'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('annual_ceiling');
+
+    expect($mei->fresh()->annual_ceiling)->toBe('81000.00');
 });
 
 it('permite o mesmo CNPJ em contas diferentes mas não na mesma conta', function (): void {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import AppBrand from '@/components/AppBrand.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 </script>
 
 <template>
@@ -12,6 +13,7 @@ import AppBrand from '@/components/AppBrand.vue'
       <a href="#duvidas">Dúvidas</a>
     </nav>
     <nav class="account-links" aria-label="Acesso à conta">
+      <ThemeToggle />
       <RouterLink class="login-link" to="/login">Entrar</RouterLink>
       <RouterLink class="signup-link" to="/register">Criar conta</RouterLink>
     </nav>
@@ -53,7 +55,7 @@ nav a {
   text-decoration: underline;
 }
 .account-links {
-  gap: 26px;
+  gap: 18px;
 }
 .signup-link {
   justify-content: center;

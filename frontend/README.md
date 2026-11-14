@@ -71,3 +71,14 @@ npm run test:e2e -- --debug
 ```sh
 npm run lint
 ```
+
+## Seleção de MEIs e dashboard
+
+Após autenticar, `/meis` permite selecionar ou cadastrar um MEI. O painel fica em
+`/meis/:meiId/dashboard`, com faturamento por emissão, gráfico mensal, projeção,
+limite editável por ano, notas/importação XML e edição dos dados cadastrais.
+A interface não calcula totais fiscais nem permite editar ou excluir notas.
+
+Contratos, decisões e operação: [dashboard](docs/dashboard-design.md) e
+[seleção de MEIs](docs/mei-selection.md). Aplique a migration do limite anual no
+backend antes de usar as métricas. Os testes de navegador usam dados fictícios.

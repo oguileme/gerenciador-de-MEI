@@ -18,6 +18,10 @@ class Mei extends Model
 
     protected $table = 'mei';
 
+    protected $attributes = [
+        'annual_ceiling' => '81000.00',
+    ];
+
     protected $fillable = [
         'cnpj',
         'mei_name',
@@ -44,6 +48,7 @@ class Mei extends Model
     protected function casts(): array
     {
         return [
+            'annual_ceiling' => 'decimal:2',
             'opening_date' => 'date',
         ];
     }

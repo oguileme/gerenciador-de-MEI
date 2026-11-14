@@ -28,7 +28,7 @@ defineOptions({ name: 'LandingPageView' })
 <style scoped>
 .landing-page {
   min-height: 100svh;
-  background: #fbfcf9;
+  background: var(--color-page);
 }
 .page-container {
   width: min(1180px, calc(100% - 64px));

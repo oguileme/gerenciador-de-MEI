@@ -12,7 +12,7 @@ const form = ref<HTMLFormElement | null>(null)
 
 async function handleSubmit() {
   if (await submit()) {
-    await router.push({ name: 'dashboard' })
+    await router.push({ name: 'mei-selection' })
     return
   }
   await nextTick()
@@ -101,10 +101,10 @@ async function handleSubmit() {
   height: 46px;
   place-items: center;
   margin-bottom: 22px;
-  border: 1px solid #e1e9da;
+  border: 1px solid var(--color-border);
   border-radius: 14px;
   color: var(--color-forest);
-  background: #f3f6ed;
+  background: var(--color-surface-soft);
 }
 .welcome-mark svg {
   width: 23px;
@@ -134,7 +134,7 @@ h1 {
   padding: 13px 20px;
   border: 1px solid var(--color-forest);
   border-radius: 9px;
-  color: var(--color-paper);
+  color: var(--color-on-accent);
   background: var(--color-forest);
   font-size: 13px;
   font-weight: 700;
@@ -144,7 +144,7 @@ h1 {
   background: var(--color-forest-hover);
 }
 .submit-button:active {
-  background: #12321f;
+  background: var(--color-forest-hover);
 }
 .preview-note {
   margin: 12px 0 0;
@@ -166,7 +166,7 @@ h1 {
   gap: 12px;
   margin-top: 32px;
   padding-top: 25px;
-  border-top: 1px solid #ecede8;
+  border-top: 1px solid var(--color-border);
 }
 .note-icon {
   display: grid;
@@ -174,8 +174,8 @@ h1 {
   height: 30px;
   place-items: center;
   border-radius: 50%;
-  color: #5b744b;
-  background: #f1f5eb;
+  color: var(--color-forest);
+  background: var(--color-sage);
 }
 .note-icon svg {
   width: 16px;
@@ -188,7 +188,7 @@ h1 {
   line-height: 1.8;
 }
 .welcome-note strong {
-  color: #536149;
+  color: var(--color-text);
   font-weight: 600;
 }
 @media (max-width: 760px) {

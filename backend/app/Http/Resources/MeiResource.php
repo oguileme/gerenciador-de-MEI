@@ -22,6 +22,7 @@ class MeiResource extends JsonResource
             'mei_name' => $this->mei_name,
             'opening_date' => $this->opening_date?->format('Y-m-d'),
             'ibge_municipality_code' => $this->ibge_municipality_code,
+            'annual_ceiling' => $this->annual_ceiling,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
