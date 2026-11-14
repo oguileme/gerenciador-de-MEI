@@ -6,12 +6,20 @@ namespace App\Domain\Revenue;
 
 use DateTimeImmutable;
 
-/** Calcula sob demanda por emissão, preservando centavos e excluindo notas não ativas. */
+/**
+ * Calcula faturamento anual, série mensal, uso do limite e projeção sem persistir agregados.
+ *
+ * As operações usam BCMath sobre strings decimais. A data de emissão define o exercício
+ * e o mês, e somente notas ativas participam dos resultados.
+ */
 final class CalculateRevenue
 {
     private const MONTHS_PER_YEAR = 12;
 
-    /** @param iterable<RevenueEntry> $entries
+    /**
+     * Produz o contrato consumido pelo dashboard a partir de lançamentos fiscais mínimos.
+     *
+     * @param  iterable<RevenueEntry>  $entries
      * @return array<string, mixed>
      */
     public function calculate(
@@ -23,6 +31,7 @@ final class CalculateRevenue
         int $warningPercent,
         int $dangerPercent,
     ): array {
+        // Inicializar os 12 meses mantém o contrato estável mesmo quando não há faturamento.
         $months = array_fill(1, self::MONTHS_PER_YEAR, '0.00');
         $count = 0;
         foreach ($entries as $entry) {
@@ -40,6 +49,7 @@ final class CalculateRevenue
         $state = bccomp(bcmul($annual, '100', 2), bcmul($limit, (string) $dangerPercent, 2), 2) >= 0
             ? 'danger'
             : (bccomp(bcmul($annual, '100', 2), bcmul($limit, (string) $warningPercent, 2), 2) >= 0 ? 'warning' : 'safe');
+        // A maior receita mensal vira apenas escala visual; não representa um limite legal mensal.
         $maximum = array_reduce($months, fn (string $a, string $b): string => $this->maximum($a, $b), '0.00');
         $period = $this->completedPeriod($months, $year, $openingDate, $today);
         $average = $period['month_count'] === 0
@@ -82,7 +92,13 @@ final class CalculateRevenue
         ];
     }
 
-    /** @param array<int, string> $months
+    /**
+     * Seleciona a amostra de meses completos usada tanto pela média quanto pela projeção.
+     *
+     * Receita anterior ao primeiro mês completo é separada como parcial: ela entra no
+     * total projetado, mas não distorce a média mensal.
+     *
+     * @param  array<int, string>  $months
      * @return array{first_month: int, month_count: int, revenue: string, partial_revenue: string}
      */
     private function completedPeriod(array $months, int $year, ?string $openingDate, DateTimeImmutable $today): array
@@ -116,7 +132,18 @@ final class CalculateRevenue
             'revenue' => $completeRevenue, 'partial_revenue' => $partialRevenue];
     }
 
-    /** @param array{first_month: int, month_count: int, revenue: string, partial_revenue: string} $period
+    /**
+     * Estende a média dos meses completos até dezembro e soma a receita do período parcial.
+     *
+     * Anos encerrados devolvem o realizado. Sem mês completo, a ausência de projeção é
+     * explícita para que a interface não apresente uma estimativa enganosa.
+     *
+     * @param array{
+     *     first_month: int,
+     *     month_count: int,
+     *     revenue: string,
+     *     partial_revenue: string
+     * } $period
      * @return array<string, mixed>
      */
     private function project(string $annual, string $limit, int $year, DateTimeImmutable $today, array $period): array
@@ -152,7 +179,11 @@ final class CalculateRevenue
         return bccomp($left, $right, 2) >= 0 ? $left : $right;
     }
 
-    /** Arredonda valores não negativos a centavos, sem conversão para float. */
+    /**
+     * Divide com uma casa adicional e aplica arredondamento decimal para centavos.
+     *
+     * O método aceita apenas valores não negativos produzidos pelo cálculo do dashboard.
+     */
     private function divideRounded(string $numerator, string $denominator): string
     {
         return bcadd(bcdiv($numerator, $denominator, 3), '0.005', 2);

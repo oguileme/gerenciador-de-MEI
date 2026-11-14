@@ -8,7 +8,11 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin Invoice */
+/**
+ * Contrato público da nota: dinheiro permanece decimal em string e datas fiscais não têm fuso.
+ *
+ * @mixin Invoice
+ */
 class InvoiceResource extends JsonResource
 {
     /**

@@ -6,6 +6,7 @@ interface RetriableRequestConfig extends InternalAxiosRequestConfig {
   retriedAfterCsrfRefresh?: boolean
 }
 
+/** Erro estável da aplicação para que componentes não dependam de detalhes do Axios. */
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -15,6 +16,7 @@ export class ApiError extends Error {
   }
 }
 
+/** Cliente único da API, configurado para a autenticação Sanctum baseada em cookie. */
 export const api = axios.create({
   withCredentials: true,
   withXSRFToken: true,
@@ -41,6 +43,7 @@ api.interceptors.response.use(
       && !config.retriedAfterCsrfRefresh
 
     if (shouldRefreshCsrf) {
+      // Uma única repetição recupera sessões expiradas sem criar um ciclo em falhas persistentes.
       config.retriedAfterCsrfRefresh = true
       await refreshCsrfToken()
       return api.request(config)

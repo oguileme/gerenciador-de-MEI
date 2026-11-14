@@ -7,8 +7,15 @@ const initialized = ref(false)
 const loading = ref(false)
 let initialization: Promise<void> | null = null
 
+/**
+ * Compartilha a sessão reativa entre telas sem persistir credenciais no navegador.
+ *
+ * O estado vive no módulo, por isso todas as chamadas do composable observam o mesmo
+ * usuário; a API continua sendo a fonte de verdade após recarregar a página.
+ */
 export function useAuth() {
   async function refreshUser(): Promise<void> {
+    // Reaproveitar a chamada em andamento impede consultas duplicadas durante os guards de rota.
     if (initialization) return initialization
     initialization = authService.currentUser()
       .then((current) => { user.value = current })

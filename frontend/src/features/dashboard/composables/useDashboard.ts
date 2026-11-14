@@ -3,7 +3,12 @@ import { dashboardService } from '@/services/dashboard'
 import type { DashboardMetrics } from '@/types/dashboard'
 import { useMeiSession } from '@/features/meis/composables/useMeiSession'
 
-/** Renova as métricas após importação, mudança de status e edição do limite. */
+/**
+ * Mantém o recorte anual e mensal do painel sincronizado com as métricas da API.
+ *
+ * Importação, mudança de status e edição do limite chamam `load` novamente porque os
+ * totais pertencem ao backend e nunca são recalculados na interface.
+ */
 export function useDashboard(meiId: string) {
   const metrics = ref<DashboardMetrics | null>(null)
   const year = ref<number>()
@@ -15,6 +20,7 @@ export function useDashboard(meiId: string) {
   onScopeDispose(() => { request++ })
 
   async function load() {
+    // O contador invalida respostas antigas quando ano, MEI ou tela mudam durante a requisição.
     const current = ++request
     loading.value = true
     error.value = ''

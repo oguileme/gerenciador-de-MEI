@@ -11,10 +11,13 @@ use App\Http\Requests\Dashboard\UpdateAnnualLimitRequest;
 use App\Http\Resources\DashboardResource;
 use App\Models\Mei;
 
+/** Traduz requisições do painel em ações de domínio, sem calcular valores no controller. */
 class DashboardController extends Controller
 {
     public function show(DashboardRequest $request, Mei $mei, GetDashboard $action): DashboardResource
     {
+        // O dia fiscal segue São Paulo; depender do fuso do servidor deslocaria
+        // viradas de mês e ano.
         $today = now('America/Sao_Paulo')->toDateTimeImmutable();
         $year = (int) $request->validated('year', $today->format('Y'));
 

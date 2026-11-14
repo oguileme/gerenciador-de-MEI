@@ -11,14 +11,25 @@ use App\Models\Mei;
 use App\Models\MeiAnnualLimit;
 use DateTimeImmutable;
 
-/** Consulta fontes brutas e configurações; não persiste nenhum agregado. */
+/**
+ * Monta a entrada do cálculo a partir das notas e configurações persistidas.
+ *
+ * Um limite específico do ano prevalece sobre o limite-base do MEI. As notas são
+ * percorridas por cursor para que o dashboard não carregue todos os registros na memória;
+ * nenhum total ou percentual calculado é salvo no banco.
+ */
 class GetDashboard
 {
     public function __construct(private CalculateRevenue $calculator) {}
 
-    /** @return array<string, mixed> */
+    /**
+     * Retorna o contrato completo de métricas anuais usado pelo DashboardResource.
+     *
+     * @return array<string, mixed>
+     */
     public function execute(Mei $mei, int $year, DateTimeImmutable $today): array
     {
+        // A configuração anual permite alterar um exercício sem reescrever o histórico dos demais.
         $limit = MeiAnnualLimit::query()->where('mei_id', $mei->id)->where('year', $year)->first();
         $invoices = $mei->invoices()
             ->where('status', 'active')

@@ -8,6 +8,7 @@ use App\Models\Mei;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
+/** Centraliza a propriedade do MEI e oculta de outras contas a existência do recurso. */
 class MeiPolicy
 {
     public function viewAny(User $user): bool
@@ -52,6 +53,7 @@ class MeiPolicy
 
     private function ownershipResponse(User $user, Mei $mei): Response
     {
+        // Responder como inexistente reduz a enumeração de IDs pertencentes a outras contas.
         return (string) $user->getKey() === (string) $mei->getAttribute('user_id')
             ? Response::allow()
             : Response::denyAsNotFound();
