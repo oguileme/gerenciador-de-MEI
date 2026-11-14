@@ -11,7 +11,7 @@ vi.mock('@/services/meis', () => ({ meiService: { list: vi.fn<typeof meiService.
 enableAutoUnmount(afterEach)
 const mei: Mei = {
   id: 1, mei_name: 'Ateliê Exemplo', cnpj: '00000000000100', opening_date: '2024-01-01',
-  ibge_municipality_code: '0000000', created_at: null, updated_at: null,
+  ibge_municipality_code: '0000000', annual_ceiling: '81000.00', created_at: null, updated_at: null,
 }
 
 async function render(path = '/meis') {

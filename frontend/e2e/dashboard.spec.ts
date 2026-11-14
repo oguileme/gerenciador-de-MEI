@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('consulta faturamento, importa XML, muda status e salva configurações', async ({ page }) => {
-  const mei = { id: 1, mei_name: 'Ateliê Aurora', cnpj: '00000000000100', opening_date: '2024-01-01', ibge_municipality_code: '0000000', created_at: null, updated_at: null }
+  const mei = { id: 1, mei_name: 'Ateliê Aurora', cnpj: '00000000000100', opening_date: '2024-01-01', ibge_municipality_code: '0000000', annual_ceiling: '81000.00', created_at: null, updated_at: null }
   const amounts = ['4200.00', '5100.00', '4800.00', '6200.00', '5400.00', '6800.00', '5900.00', '7200.00', '6100.00', '7550.00', '9500.00', '0.00']
   const heights = ['44.21', '53.68', '50.53', '65.26', '56.84', '71.58', '62.11', '75.79', '64.21', '79.47', '100.00', '0.00']
   const metrics = {

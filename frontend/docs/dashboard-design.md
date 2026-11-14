@@ -34,9 +34,9 @@ mensal legal. A projeção será apresentada como estimativa, com método e per�
 - Faixas de acompanhamento: verde abaixo de 80%, amarelo de 80% até abaixo de 95%,
   vermelho a partir de 95%. Parametrizadas em `backend/config/dashboard.php`.
 - Sem aviso especial ao chegar a 100%, sem notificação e sem envio de e-mail nesta etapa.
-- A referência inicial de acompanhamento é R$ 81.000,00, configurável via
-  `MEI_DEFAULT_ANNUAL_CEILING`; o valor salvo por MEI/ano tem prioridade. Alterar esse
-  valor não muda o enquadramento legal. Não se presume que esse padrão será válido
+- A referência inicial de acompanhamento é R$ 81.000,00, persistida em
+  `Mei::annual_ceiling`; o valor salvo por MEI/ano tem prioridade. Alterar esses valores
+  não muda o enquadramento legal. Não se presume que esse padrão será válido
   legalmente para todos os anos ou modalidades de MEI.
 - Projeção: média dos meses de atividade completos no ano, incluindo meses sem receita.
   O mês corrente não entra na amostra. Se a abertura ocorrer depois do dia 1, a média

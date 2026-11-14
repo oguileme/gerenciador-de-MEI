@@ -5,6 +5,7 @@ export interface Mei {
   mei_name: string
   opening_date: string | null
   ibge_municipality_code: string
+  annual_ceiling: string
   created_at: string | null
   updated_at: string | null
 }

@@ -71,7 +71,8 @@ Aplique as migrations com `php artisan migrate` no ambiente desejado; a nova tab
 Todas as rotas exigem Sanctum e autorização pelo MEI. O faturamento considera apenas
 notas ativas, pelo valor bruto e data de emissão. O limite anual informado é integral,
 sem proporcionalidade. As faixas ficam em `config/dashboard.php` (80% e 95%); não há
-notificação ao atingir 100%. A referência inicial configurável é
-`MEI_DEFAULT_ANNUAL_CEILING=81000.00`, sem representar garantia de enquadramento legal.
+notificação ao atingir 100%. Cada MEI possui uma referência inicial de R$ 81.000,00
+em `annual_ceiling`; um limite configurado para um ano específico tem prioridade. Esses
+valores servem ao acompanhamento e não representam garantia de enquadramento legal.
 
 Veja [decisões, cálculo da projeção e integração](../frontend/docs/dashboard-design.md).

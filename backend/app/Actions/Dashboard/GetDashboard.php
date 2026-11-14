@@ -34,7 +34,7 @@ class GetDashboard
         return $this->calculator->calculate(
             $invoices,
             $year,
-            $limit?->amount ?? (string) config('dashboard.default_annual_ceiling'),
+            $limit?->amount ?? $mei->annual_ceiling,
             $mei->opening_date?->format('Y-m-d'),
             $today,
             (int) config('dashboard.warning_percent'),

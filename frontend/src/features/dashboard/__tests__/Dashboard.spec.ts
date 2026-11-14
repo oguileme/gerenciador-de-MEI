@@ -20,7 +20,8 @@ vi.mock('@/services/invoices', () => ({ invoiceService: {
 vi.mock('@/services/meis', () => ({ meiService: { update: vi.fn<typeof meiService.update>() } }))
 enableAutoUnmount(afterEach)
 const mei: Mei = { id: 1, mei_name: 'Ateliê Exemplo', cnpj: '00000000000100',
-  opening_date: '2024-01-01', ibge_municipality_code: '0000000', created_at: null, updated_at: null }
+  opening_date: '2024-01-01', ibge_municipality_code: '0000000', annual_ceiling: '81000.00',
+  created_at: null, updated_at: null }
 const invoice: Invoice = { id: 3, mei_id: 1, type: 'nfse', status: 'active', access_key: '000000',
   invoice_number: '42', customer_name: 'Cliente Exemplo', service_amount: '1200.50', net_amount: '1200.50',
   issue_date: '2026-01-01', competence_date: '2025-12-01', description: 'Serviço de teste',

@@ -32,6 +32,7 @@ class StoreMeiRequest extends FormRequest
             'mei_name' => ['required', 'string', 'max:255'],
             'opening_date' => ['required', 'date_format:Y-m-d'],
             'ibge_municipality_code' => ['required', 'string', 'regex:/^\d{7}$/'],
+            'annual_ceiling' => ['prohibited'],
             'user_id' => ['prohibited'],
         ];
     }

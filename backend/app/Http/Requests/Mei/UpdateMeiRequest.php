@@ -22,6 +22,7 @@ class UpdateMeiRequest extends FormRequest
             'mei_name' => ['sometimes', 'string', 'max:255'],
             'opening_date' => ['sometimes', 'date_format:Y-m-d'],
             'ibge_municipality_code' => ['sometimes', 'string', 'regex:/^\d{7}$/'],
+            'annual_ceiling' => ['prohibited'],
             'cnpj' => ['prohibited'],
             'user_id' => ['prohibited'],
         ];

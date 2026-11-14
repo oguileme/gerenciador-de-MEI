@@ -11,7 +11,10 @@ uses(RefreshDatabase::class);
 it('calcula métricas por emissão com isolamento entre MEIs e strings decimais', function (): void {
     $this->travelTo(now()->setDate(2026, 7, 12));
     $user = User::factory()->create();
-    $mei = Mei::factory()->for($user)->create(['opening_date' => '2020-01-01']);
+    $mei = Mei::factory()->for($user)->create([
+        'annual_ceiling' => '92500.25',
+        'opening_date' => '2020-01-01',
+    ]);
     $other = Mei::factory()->for($user)->create();
     dashboardInvoice($mei, ['service_amount' => '12.34']);
     dashboardInvoice($mei, ['service_amount' => '0.01']);
@@ -24,17 +27,17 @@ it('calcula métricas por emissão com isolamento entre MEIs e strings decimais'
         ->assertJsonPath('data.monthly_average.amount', '2.06')
         ->assertJsonPath('data.monthly_average.month_count', 6)
         ->assertJsonPath('data.active_invoice_count', 2)
-        ->assertJsonPath('data.ceiling.amount', '81000.00')
+        ->assertJsonPath('data.ceiling.amount', '92500.25')
         ->assertJsonPath('data.date_basis', 'issue_date');
 });
 
 it('salva limite por ano sem modificar outros anos ou contas', function (): void {
     $user = User::factory()->create();
-    $mei = Mei::factory()->for($user)->create();
+    $mei = Mei::factory()->for($user)->create(['annual_ceiling' => '83000.00']);
     $this->actingAs($user)->putJson("/api/meis/{$mei->id}/annual-limit", ['year' => 2026, 'amount' => '95000.01'])
         ->assertOk()->assertJsonPath('data.ceiling.amount', '95000.01');
     $this->getJson("/api/meis/{$mei->id}/dashboard?year=2025")
-        ->assertOk()->assertJsonPath('data.ceiling.amount', '81000.00');
+        ->assertOk()->assertJsonPath('data.ceiling.amount', '83000.00');
     $this->putJson("/api/meis/{$mei->id}/annual-limit", ['year' => 2026, 'amount' => '100.01'])->assertOk();
     $this->assertDatabaseCount('mei_annual_limits', 1);
     foreach (['0.00', '-1.00', '1.999', '1e3', '10000000000000.00', 100] as $invalid) {
