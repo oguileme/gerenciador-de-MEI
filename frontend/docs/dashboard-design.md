@@ -58,6 +58,8 @@ mensal legal. A projeção será apresentada como estimativa, com método e per�
 - Apenas nome, data de abertura e município são editáveis no cadastro. O CNPJ permanece
   imutável conforme o contrato preexistente, para preservar o vínculo com os XMLs.
 - Alterar o status acompanha uma situação registrada; não cancela a nota no emissor.
+- A importação aceita seleção pelo explorador de arquivos ou múltiplos XMLs
+  arrastados para a zona de envio na seção de notas.
 
 ## API e operação
 

@@ -61,7 +61,13 @@ test('consulta faturamento, importa XML, muda status e salva configurações', a
   await expect(page.locator('.ceiling-amount')).toHaveText('R$ 90.000,01')
   await page.getByLabel('Status da nota 1042').selectOption('cancelled')
   await expect(page.locator('.annual-amount')).toHaveText('R$ 65.550,00')
-  await page.locator('input[type="file"]').setInputFiles({ name: 'exemplo.xml', mimeType: 'application/xml', buffer: Buffer.from('<xml/>') })
+  await page.locator('.upload-dropzone').evaluate((element) => {
+    const transfer = new DataTransfer()
+    transfer.items.add(new File(['<xml/>'], 'exemplo.xml', { type: 'application/xml' }))
+    element.dispatchEvent(new DragEvent('drop', {
+      bubbles: true, cancelable: true, dataTransfer: transfer,
+    }))
+  })
   await expect(page.getByText('exemplo.xml: Importada')).toBeVisible()
   await page.getByRole('button', { name: 'Dados do MEI' }).click()
   await page.getByLabel('Nome do MEI', { exact: true }).fill('Ateliê Aurora atualizado')

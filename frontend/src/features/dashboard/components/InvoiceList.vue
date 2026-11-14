@@ -9,15 +9,39 @@ const { invoices, page, lastPage, total, status, loading, error, notice,
   updating, importing, uploads, load, updateStatus, importFiles } = useInvoices(props.meiId, props.refreshMetrics)
 const expanded = ref<number | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
+const dragging = ref(false)
+let dragDepth = 0
 const labels: Record<InvoiceStatus, string> = {
   active: 'Ativa', cancelled: 'Cancelada', substituted: 'Substituída',
 }
 onMounted(() => load())
 
+function openImport() {
+  if (!importing.value) fileInput.value?.click()
+}
 async function handleFiles(event: Event) {
   const input = event.target as HTMLInputElement
   await importFiles(Array.from(input.files ?? []))
   input.value = ''
+}
+function handleDragEnter() {
+  if (importing.value) return
+  dragDepth++
+  dragging.value = true
+}
+function handleDragLeave() {
+  if (importing.value) return
+  dragDepth = Math.max(0, dragDepth - 1)
+  if (dragDepth === 0) dragging.value = false
+}
+function handleDragOver(event: DragEvent) {
+  if (!importing.value && event.dataTransfer) event.dataTransfer.dropEffect = 'copy'
+}
+async function handleDrop(event: DragEvent) {
+  dragDepth = 0
+  dragging.value = false
+  if (importing.value) return
+  await importFiles(Array.from(event.dataTransfer?.files ?? []))
 }
 function changeStatus(invoice: Invoice, event: Event) {
   const input = event.target as HTMLSelectElement
@@ -25,7 +49,7 @@ function changeStatus(invoice: Invoice, event: Event) {
   input.value = invoice.status
   void updateStatus(invoice, value)
 }
-defineExpose({ openImport: () => fileInput.value?.click() })
+defineExpose({ openImport })
 </script>
 
 <template>
@@ -39,12 +63,22 @@ defineExpose({ openImport: () => fileInput.value?.click() })
             <option v-for="(label, value) in labels" :key="value" :value="value">{{ label }}</option>
           </select>
         </label>
-        <button class="button-secondary" :disabled="importing" @click="fileInput?.click()">
-          {{ importing ? 'Importando…' : 'Importar XML' }}
-        </button>
-        <input ref="fileInput" class="file-input" type="file" accept=".xml,application/xml,text/xml" multiple aria-label="Arquivos XML de NFS-e" :disabled="importing" @change="handleFiles">
       </div>
     </div>
+    <div
+      class="upload-dropzone" :class="{ dragging, disabled: importing }" role="button"
+      :tabindex="importing ? -1 : 0" :aria-disabled="importing"
+      aria-label="Importar arquivos XML de NFS-e"
+      @click="openImport" @keydown.enter.prevent="openImport" @keydown.space.prevent="openImport"
+      @dragenter.prevent="handleDragEnter" @dragover.prevent="handleDragOver"
+      @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop"
+    >
+      <span class="upload-icon" aria-hidden="true">↑</span>
+      <span><strong>{{ importing ? 'Importando XMLs…' : 'Arraste seus XMLs aqui' }}</strong>
+        <small>{{ importing ? 'Aguarde o processamento dos arquivos.' : 'ou clique para procurar nos arquivos' }}</small>
+      </span>
+    </div>
+    <input ref="fileInput" class="file-input" type="file" accept=".xml,application/xml,text/xml" multiple aria-label="Arquivos XML de NFS-e" :disabled="importing" @change="handleFiles">
     <ul v-if="uploads.length" class="upload-results" aria-live="polite">
       <li v-for="(upload, index) in uploads" :key="index" :class="{ failed: !upload.success }">
         <strong>{{ upload.name }}</strong>: {{ upload.message }}
@@ -137,6 +171,65 @@ select {
 
 .file-input {
   display: none;
+}
+
+.upload-dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 112px;
+  margin-top: 22px;
+  padding: 20px;
+  border: 2px dashed var(--color-border);
+  border-radius: 14px;
+  color: var(--color-forest);
+  background: var(--color-surface-soft);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s ease, background-color .15s ease, transform .15s ease;
+}
+
+.upload-dropzone:hover, .upload-dropzone:focus-visible, .upload-dropzone.dragging {
+  border-color: var(--color-forest);
+  background: var(--color-sage);
+}
+
+.upload-dropzone:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-focus) 25%, transparent);
+  outline-offset: 3px;
+}
+
+.upload-dropzone.dragging {
+  transform: translateY(-2px);
+}
+
+.upload-dropzone.disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+.upload-dropzone strong, .upload-dropzone small {
+  display: block;
+}
+
+.upload-dropzone small {
+  margin-top: 4px;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.upload-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .scroll-hint {
@@ -292,6 +385,10 @@ dd {
   }
   .invoice-actions {
     width: 100%;
+  }
+  .upload-dropzone {
+    min-height: 104px;
+    padding: 18px 14px;
   }
 }
 </style>

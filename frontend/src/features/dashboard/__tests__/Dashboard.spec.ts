@@ -124,6 +124,67 @@ describe('Dashboard do MEI', () => {
     expect(dashboardService.get).toHaveBeenCalledTimes(2)
   })
 
+  it('abre o seletor por clique e teclado', async () => {
+    const wrapper = await render()
+    const input = wrapper.get('input[type="file"]')
+    const click = vi.spyOn(input.element as HTMLInputElement, 'click').mockImplementation(() => {})
+    const dropzone = wrapper.get('.upload-dropzone')
+    await dropzone.trigger('click')
+    await dropzone.trigger('keydown', { key: 'Enter' })
+    await dropzone.trigger('keydown', { key: ' ' })
+    expect(click).toHaveBeenCalledTimes(3)
+  })
+
+  it('destaca a zona durante o arraste sem piscar em elementos internos', async () => {
+    const wrapper = await render()
+    const dropzone = wrapper.get('.upload-dropzone')
+    await dropzone.trigger('dragenter')
+    await dropzone.trigger('dragenter')
+    expect(dropzone.classes()).toContain('dragging')
+    await dropzone.trigger('dragleave')
+    expect(dropzone.classes()).toContain('dragging')
+    await dropzone.trigger('dragleave')
+    expect(dropzone.classes()).not.toContain('dragging')
+  })
+
+  it('importa os XMLs soltos e remove o destaque ao concluir o drop', async () => {
+    const wrapper = await render()
+    vi.mocked(invoiceService.importXml).mockResolvedValueOnce(invoice)
+      .mockRejectedValueOnce(new ApiError(422, { message: 'XML inválido.' }))
+    const dropzone = wrapper.get('.upload-dropzone')
+    const files = [new File(['<xml/>'], 'nova.xml'), new File(['inválido'], 'invalida.xml')]
+    await dropzone.trigger('dragenter')
+    await dropzone.trigger('drop', { dataTransfer: { files } })
+    await flushPromises()
+    expect(dropzone.classes()).not.toContain('dragging')
+    expect(invoiceService.importXml).toHaveBeenNthCalledWith(1, '1', files[0])
+    expect(invoiceService.importXml).toHaveBeenNthCalledWith(2, '1', files[1])
+    expect(wrapper.text()).toContain('nova.xml: Importada')
+    expect(wrapper.text()).toContain('invalida.xml: XML inválido.')
+    expect(dashboardService.get).toHaveBeenCalledTimes(2)
+    expect(invoiceService.list).toHaveBeenCalledTimes(2)
+  })
+
+  it('ignora drop vazio e novos arquivos durante uma importação', async () => {
+    const wrapper = await render()
+    const dropzone = wrapper.get('.upload-dropzone')
+    await dropzone.trigger('drop', { dataTransfer: { files: [] } })
+    expect(invoiceService.importXml).not.toHaveBeenCalled()
+
+    let finishImport: ((invoice: Invoice) => void) | undefined
+    vi.mocked(invoiceService.importXml).mockImplementationOnce(() => new Promise((resolve) => {
+      finishImport = resolve
+    }))
+    const first = new File(['<xml/>'], 'primeira.xml')
+    const ignored = new File(['<xml/>'], 'ignorada.xml')
+    void dropzone.trigger('drop', { dataTransfer: { files: [first] } })
+    await vi.waitFor(() => expect(dropzone.attributes('aria-disabled')).toBe('true'))
+    await dropzone.trigger('drop', { dataTransfer: { files: [ignored] } })
+    expect(invoiceService.importXml).toHaveBeenCalledTimes(1)
+    finishImport?.(invoice)
+    await flushPromises()
+  })
+
   it('exibe estados vazios e projeção sem dados sem inventar estimativa', async () => {
     vi.mocked(invoiceService.list).mockResolvedValueOnce({ data: [], meta: { current_page: 1, last_page: 1, total: 0 } })
     vi.mocked(dashboardService.get).mockResolvedValueOnce({ ...metrics, projection: { amount: null, status: 'insufficient_data', completed_months: 0 } })
