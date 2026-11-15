@@ -46,6 +46,14 @@ class Mei extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    /**
+     * @return HasMany<Quote, $this>
+     */
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(Quote::class);
+    }
+
     protected function casts(): array
     {
         return [

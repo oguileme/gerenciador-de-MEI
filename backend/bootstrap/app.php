@@ -3,6 +3,9 @@
 use App\Domain\Invoices\Exceptions\DuplicateInvoice;
 use App\Domain\Invoices\Exceptions\InvalidInvoiceXml;
 use App\Domain\Invoices\Exceptions\InvoiceStorageFailed;
+use App\Domain\Quotes\Exceptions\InvalidQuoteStatusTransition;
+use App\Domain\Quotes\Exceptions\QuoteAmountExceeded;
+use App\Domain\Quotes\Exceptions\QuoteNotPending;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -56,5 +59,28 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => 'Não foi possível concluir a importação da NFS-e.',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        });
+
+        $exceptions->render(function (QuoteNotPending|InvalidQuoteStatusTransition $exception, Request $request): ?JsonResponse {
+            if (! $request->is('api/*')) {
+                return null;
+            }
+
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], Response::HTTP_CONFLICT);
+        });
+
+        $exceptions->render(function (QuoteAmountExceeded $exception, Request $request): ?JsonResponse {
+            if (! $request->is('api/*')) {
+                return null;
+            }
+
+            return response()->json([
+                'message' => $exception->getMessage(),
+                'errors' => [
+                    $exception->field => [$exception->getMessage()],
+                ],
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         });
     })->create();
