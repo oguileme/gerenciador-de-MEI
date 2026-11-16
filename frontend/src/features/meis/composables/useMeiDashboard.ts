@@ -16,6 +16,7 @@ export function useMeiDashboard() {
   onScopeDispose(() => { request++ })
 
   async function load() {
+    // A resposta só pode preencher a tela se ainda pertencer ao MEI solicitado mais recentemente.
     const current = ++request
     mei.value = null
     error.value = ''

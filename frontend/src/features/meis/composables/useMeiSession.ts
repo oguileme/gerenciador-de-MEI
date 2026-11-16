@@ -2,7 +2,11 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { ApiError } from '@/config/api'
 
-/** Encerra o contexto local quando a API informa que a sessão expirou. */
+/**
+ * Converte uma resposta 401 em encerramento do contexto local e retorno ao login.
+ *
+ * O booleano informa ao chamador que o erro já foi tratado, evitando mensagens duplicadas.
+ */
 export function useMeiSession() {
   const router = useRouter()
   const auth = useAuth()

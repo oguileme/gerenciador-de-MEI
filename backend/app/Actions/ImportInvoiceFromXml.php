@@ -17,6 +17,12 @@ use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\FilesystemManager;
 use Throwable;
 
+/**
+ * Orquestra a importação sem misturar parsing, armazenamento e persistência.
+ *
+ * O parser trata o XML como entrada não confiável; esta ação confirma o vínculo com o
+ * MEI, garante idempotência e preserva o documento original antes de criar a nota.
+ */
 final class ImportInvoiceFromXml
 {
     public function __construct(
@@ -25,6 +31,13 @@ final class ImportInvoiceFromXml
         private readonly DatabaseManager $database,
     ) {}
 
+    /**
+     * Valida, identifica e persiste uma NFS-e vinculada ao MEI informado.
+     *
+     * @throws InvalidInvoiceXml quando conteúdo, tamanho ou vínculo fiscal são inválidos
+     * @throws DuplicateInvoice quando hash ou chave de acesso já pertencem ao MEI
+     * @throws InvoiceStorageFailed quando o documento original não pode ser preservado
+     */
     public function execute(Mei $mei, string $xml): Invoice
     {
         $maximumBytes = (int) config('invoices.xml_max_kilobytes') * 1024;
@@ -39,6 +52,7 @@ final class ImportInvoiceFromXml
             throw new InvalidInvoiceXml('O CNPJ da NFS-e não corresponde ao MEI selecionado.');
         }
 
+        // O hash detecta o mesmo arquivo; a chave detecta o mesmo documento com bytes diferentes.
         $hash = hash('sha256', $xml);
 
         $duplicateExists = Invoice::query()
@@ -55,6 +69,8 @@ final class ImportInvoiceFromXml
         }
 
         $path = sprintf('xml/%s/%s.xml', $mei->getKey(), $hash);
+        // Disco e banco não compartilham transação: um arquivo órfão é recuperável,
+        // enquanto uma nota sem seu XML de origem não é.
         $this->storeXml($path, $xml);
 
         try {
@@ -75,6 +91,8 @@ final class ImportInvoiceFromXml
                 ])
             );
         } catch (QueryException $exception) {
+            // O índice único fecha a corrida entre importações que passaram juntas
+            // pela consulta anterior.
             if (in_array((string) $exception->getCode(), ['23000', '23505'], true)) {
                 throw new DuplicateInvoice;
             }

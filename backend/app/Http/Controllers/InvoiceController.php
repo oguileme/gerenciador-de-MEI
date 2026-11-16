@@ -12,6 +12,7 @@ use App\Http\Resources\InvoiceResource;
 use App\Models\Mei;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/** Expõe somente consulta paginada e mudança de status; dados fiscais permanecem imutáveis. */
 class InvoiceController extends Controller
 {
     public function index(ListInvoicesRequest $request, Mei $mei): AnonymousResourceCollection

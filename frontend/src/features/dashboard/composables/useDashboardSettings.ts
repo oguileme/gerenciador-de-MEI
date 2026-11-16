@@ -5,7 +5,12 @@ import { dashboardService } from '@/services/dashboard'
 import type { Mei } from '@/types/mei'
 import { useMeiSession } from '@/features/meis/composables/useMeiSession'
 
-/** Grava dados cadastrais ou limite anual, mantendo os campos em caso de falha. */
+/**
+ * Grava dados cadastrais ou limite anual e mantém a edição aberta em caso de falha.
+ *
+ * O valor digitado em pt-BR é normalizado para a string decimal exigida pela API; erros
+ * 422 retornam ao campo correspondente sem duplicar as regras fiscais no frontend.
+ */
 export function useDashboardSettings(mei: Mei, year: number, amount: string, mode: 'mei' | 'limit') {
   const values = reactive({ mei_name: mei.mei_name, opening_date: mei.opening_date ?? '',
     ibge_municipality_code: mei.ibge_municipality_code, amount: amount.replace('.', ',') })
@@ -21,6 +26,7 @@ export function useDashboardSettings(mei: Mei, year: number, amount: string, mod
     submitting.value = true
     try {
       if (mode === 'limit') {
+        // A vírgula é aceita na interface, mas o contrato HTTP usa ponto e exatamente duas casas.
         const normalized = values.amount.trim().replace(',', '.')
         if (!/^(?:0|[1-9]\d{0,12})(?:\.\d{1,2})?$/.test(normalized)) {
           errors.value.amount = 'Informe um valor sem separador de milhar, como 81000,00.'

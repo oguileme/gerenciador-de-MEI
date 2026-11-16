@@ -23,6 +23,7 @@ test('consulta faturamento, importa XML, muda status e salva configurações', a
   })
   await page.route('**/api/meis/1/dashboard*', (route) => route.fulfill({ json: { data: metrics } }))
   await page.route('**/api/meis/1/invoices?*', (route) => route.fulfill({ json: { data: invoices, meta: { current_page: 1, last_page: 1, total: 38 } } }))
+  await page.route('**/api/meis/1/quotes?*', (route) => route.fulfill({ json: { data: [], meta: { current_page: 1, last_page: 1, total: 0 } } }))
   await page.route('**/api/meis/1/annual-limit', async (route) => {
     const payload = route.request().postDataJSON()
     expect(payload).toEqual({ year: 2026, amount: '90000.01' })

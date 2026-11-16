@@ -56,6 +56,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  // O guard protege a navegação; a autorização definitiva continua sendo responsabilidade da API.
   const auth = useAuth()
   try { await auth.refreshUser() } catch { /* falhas de rede são tratadas pela tela */ }
   if (to.meta.requiresAuth && !auth.user.value) {

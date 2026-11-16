@@ -4,7 +4,11 @@ import { meiService } from '@/services/meis'
 import type { CreateMei, Mei } from '@/types/mei'
 import { useMeiSession } from './useMeiSession'
 
-/** Mantém os dados em memória e apresenta erros de validação devolvidos pela API. */
+/**
+ * Mantém o formulário em memória e traduz erros 422 da API para seus respectivos campos.
+ *
+ * O backend associa o novo MEI à sessão; o formulário nunca envia um identificador de usuário.
+ */
 export function useCreateMei() {
   const values = reactive<CreateMei>({
     mei_name: '', cnpj: '', opening_date: '', ibge_municipality_code: '',

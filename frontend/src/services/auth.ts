@@ -9,6 +9,7 @@ export interface AuthUser {
 
 interface ApiData<T> { data: T }
 
+/** Executa o handshake CSRF do Sanctum e mantém a autenticação exclusivamente em cookie. */
 export const authService = {
   async register(payload: { name: string; email: string; password: string; password_confirmation: string }) {
     await refreshCsrfToken()

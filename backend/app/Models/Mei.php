@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/** Agregado fiscal pertencente a uma conta e raiz de acesso para suas notas. */
 class Mei extends Model
 {
     /** @use HasFactory<MeiFactory> */
@@ -43,6 +44,14 @@ class Mei extends Model
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * @return HasMany<Quote, $this>
+     */
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(Quote::class);
     }
 
     protected function casts(): array

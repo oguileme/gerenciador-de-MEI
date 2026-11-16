@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/** Valida credenciais e limita tentativas pela combinação normalizada de e-mail e IP. */
 class LoginRequest extends FormRequest
 {
     public function authorize(): bool

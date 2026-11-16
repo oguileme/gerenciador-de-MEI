@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
+/**
+ * Gerencia MEIs da conta autenticada.
+ *
+ * Listagem e criação partem da relação do usuário; as demais rotas passam pela Policy.
+ */
 class MeiController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection

@@ -8,7 +8,11 @@ use App\Models\Mei;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin Mei */
+/**
+ * Contrato público do MEI; não expõe o proprietário nem atributos internos de exclusão.
+ *
+ * @mixin Mei
+ */
 class MeiResource extends JsonResource
 {
     /**

@@ -7,7 +7,11 @@ namespace App\Actions\Dashboard;
 use App\Models\Mei;
 use App\Models\MeiAnnualLimit;
 
-/** Grava uma configuração por MEI/ano sem persistir os agregados calculados. */
+/**
+ * Grava somente a configuração de limite do exercício, nunca os totais calculados.
+ *
+ * O upsert torna a operação idempotente: a mesma chave MEI/ano cria ou substitui o valor.
+ */
 class UpdateAnnualLimit
 {
     public function execute(Mei $mei, int $year, string $amount): void
